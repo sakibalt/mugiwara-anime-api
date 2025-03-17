@@ -7,7 +7,9 @@ const hianime = new HiAnime.Scraper();
 const hianimeRouter = new Hono<{ Variables: AniwatchAPIVariables }>();
 
 // /api/v2/hianime
-hianimeRouter.get("/", (c) => c.redirect("/", 301));
+hianimeRouter.get("/", async (c) => {
+  return c.json({ success: true, message: "Hianime API is working!" });
+});
 
 // /api/v2/hianime/home
 hianimeRouter.get("/home", async (c) => {
