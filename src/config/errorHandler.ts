@@ -19,7 +19,7 @@ export const errorHandler: ErrorHandler = (err, c) => {
 };
 
 export const notFoundHandler: NotFoundHandler = (c) => {
-  errResp.status = 404;
+  errResp.status = 505;
   errResp.message = "Not Found";
 
   console.error(errResp);
