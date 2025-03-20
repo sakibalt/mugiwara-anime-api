@@ -14,9 +14,10 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { serveStatic } from "@hono/node-server/serve-static";
 
-import pkgJson from "../package.json" with { type: "json" };
 import { errorHandler, notFoundHandler } from "./config/errorHandler.ts";
 import type { AniwatchAPIVariables } from "./config/variables.ts";
+
+const pkgJson = await import("../package.json", { assert: { type: "json" } });
 
 config();
 
@@ -41,7 +42,7 @@ app.use("/", serveStatic({ root: "public" }));
 app.get("/health", (c) => c.text("daijoubu", { status: 200 }));
 app.get("/v", async (c) =>
   c.text(
-    `v${"version" in pkgJson && pkgJson?.version ? pkgJson.version : "-1"}`
+    `v${"version" in pkgJson.default && pkgJson.default?.version ? pkgJson.default.version : "-1"}`
   )
 );
 
