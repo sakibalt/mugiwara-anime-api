@@ -74,5 +74,5 @@ if (!Boolean(process.env?.ANIWATCH_API_VERCEL_DEPLOYMENT)) {
     }, interval);
   }
 }
-
+app.get("/test-json", (c) => c.json({ message: "It works!" }));
 export default app;
