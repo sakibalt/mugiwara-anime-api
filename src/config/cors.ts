@@ -12,13 +12,13 @@ const allowedOrigins = [
 const corsConfig = cors({
   origin: (origin) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      return true; // Allow request from allowed origins
+      return origin; // **FIX: Return the actual origin**
     }
-    return false; // Block others
+    return null; // **FIX: Return null for disallowed origins**
   },
   allowMethods: ["GET", "POST", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
-  exposeHeaders: ["Content-Length", "X-Kuma-Revision"], // Ensuring valid headers
+  exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
   maxAge: 600,
   credentials: true,
 });
