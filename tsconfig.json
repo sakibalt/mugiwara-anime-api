@@ -7,22 +7,19 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
-    //
     "strict": true,
-    // "noUncheckedIndexedAccess": true,
-    //
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "moduleResolution": "node",
+    "module": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "./dist",
     "rootDir": "./",
     "sourceMap": true,
-    //
     "declaration": true,
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "strictFunctionTypes": true,
+    "allowImportingTsExtensions": true,
     "lib": ["ES2023"]
   },
   "include": ["./src", "./api"],
