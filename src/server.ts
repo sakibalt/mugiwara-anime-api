@@ -3,25 +3,24 @@ import { config } from "dotenv";
 
 import corsConfig from "./config/cors.ts";
 import { ratelimit } from "./config/ratelimit.ts";
+
 import {
   cacheConfigSetter,
   cacheControlMiddleware,
 } from "./middleware/cache.ts";
 import { hianimeRouter } from "./routes/hianime.ts";
-import { errorHandler, notFoundHandler } from "./config/errorHandler.ts";
+
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 
 import pkgJson from "../package.json" with { type: "json" };
-import { errorHandler, notFoundHandler } from "./config/errorHandler.js";
-import type { AniwatchAPIVariables } from "./config/variables.js";
+import { errorHandler, notFoundHandler } from "./config/errorHandler.ts";
+import type { AniwatchAPIVariables } from "./config/variables.ts";
 
 config();
 
 const BASE_PATH = "/api/v2" as const;
-const PORT: number = Number(process.env.ANIWATCH_API_PORT) || 4000;
 const ANIWATCH_API_HOSTNAME = process.env?.ANIWATCH_API_HOSTNAME;
 
 const app = new Hono<{ Variables: AniwatchAPIVariables }>();
@@ -31,7 +30,7 @@ app.use(corsConfig);
 app.use(cacheControlMiddleware);
 
 // CAUTION: For personal deployments, "refrain" from having an env
-// named "ANIWATCH_API_HOSTNAME". You may face rate limitting
+// named "ANIWATCH_API_HOSTNAME". You may face rate limiting
 // or other issues if you do.
 const ISNT_PERSONAL_DEPLOYMENT = Boolean(ANIWATCH_API_HOSTNAME);
 if (ISNT_PERSONAL_DEPLOYMENT) {
@@ -56,10 +55,12 @@ app
 app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
-export default app; // Ensure this is the last line for Vercel to work
-  // NOTE: remove the `if` block below for personal deployments
+// NOTE: this env is "required" for Vercel deployments
+if (!Boolean(process.env?.ANIWATCH_API_VERCEL_DEPLOYMENT)) {
+  console.info("\x1b[1;36m" + `aniwatch-api ready on Vercel` + "\x1b[0m");
+
   if (ISNT_PERSONAL_DEPLOYMENT) {
-    const interval = 9 * 60 * 1000; // 9mins
+    const interval = 9 * 60 * 1000; // 9 mins
 
     // don't sleep
     setInterval(() => {
