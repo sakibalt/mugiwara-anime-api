@@ -1,15 +1,14 @@
 import https from "https";
 import { config } from "dotenv";
 
-import corsConfig from "./config/cors.js";
-import { ratelimit } from "./config/ratelimit.js";
-
+import corsConfig from "./config/cors.ts";
+import { ratelimit } from "./config/ratelimit.ts";
 import {
   cacheConfigSetter,
   cacheControlMiddleware,
-} from "./middleware/cache.js";
-import { hianimeRouter } from "./routes/hianime.js";
-
+} from "./middleware/cache.ts";
+import { hianimeRouter } from "./routes/hianime.ts";
+import { errorHandler, notFoundHandler } from "./config/errorHandler.ts";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { serve } from "@hono/node-server";
@@ -57,17 +56,7 @@ app
 app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
-// NOTE: this env is "required" for vercel deployments
-if (!Boolean(process.env?.ANIWATCH_API_VERCEL_DEPLOYMENT)) {
-  serve({
-    port: PORT,
-    fetch: app.fetch,
-  }).addListener("listening", () =>
-    console.info(
-      "\x1b[1;36m" + `aniwatch-api at http://localhost:${PORT}` + "\x1b[0m"
-    )
-  );
-
+export default app; // Ensure this is the last line for Vercel to work
   // NOTE: remove the `if` block below for personal deployments
   if (ISNT_PERSONAL_DEPLOYMENT) {
     const interval = 9 * 60 * 1000; // 9mins
