@@ -12,12 +12,13 @@ const allowedOrigins = [
 const corsConfig = cors({
   origin: (origin) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      return origin; // Allow requests from allowed origins
+      return true; // Allow request from allowed origins
     }
-    return "https://mugiwaraanime.great-site.net"; // Default origin
+    return false; // Block others
   },
   allowMethods: ["GET", "POST", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
+  exposeHeaders: ["Content-Length", "X-Kuma-Revision"], // Ensuring valid headers
   maxAge: 600,
   credentials: true,
 });
